@@ -24,8 +24,7 @@ func main() {
 		fmt.Fprint(writer, "Hello World!")
 	})
 	mux.HandleFunc("/bar", barHandler)
-
-
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	// 웹 서버 시작
 	http.ListenAndServe(":3000", mux)
 }
