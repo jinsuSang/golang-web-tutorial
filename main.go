@@ -3,13 +3,22 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 )
+
+func barHandler(writer http.ResponseWriter, req *http.Request) {
+	values := req.URL.Query()  // 쿼리 인수
+	name := values.Get("name") // 특정 키 값 확인
+	if name == "" {
+		name = "World"
+	}
+	id, _ := strconv.Atoi(values.Get("id")) // id 값을 int 형으로 변환
+	fmt.Fprintf(writer, "Hello %s! id: %d", name, id)
+}
 
 func main() {
 	// 웹 핸들러 등록
-	http.HandleFunc("/", func(writer http.ResponseWriter, r *http.Request){
-		fmt.Fprint(writer, "Hello World")
-	})
+	http.HandleFunc("/", barHandler)
 	// 웹 서버 시작
 	http.ListenAndServe(":3000", nil)
 }
