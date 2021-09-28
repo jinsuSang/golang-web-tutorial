@@ -1,10 +1,25 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 )
+
+type Student struct {
+	Name  string `json:"name"`
+	Age   int    `json:"age"`
+	Score int    `json:"score"`
+}
+
+func studentHandler(writer http.ResponseWriter, req *http.Request){
+	var student = Student{Name: "jinsu", Age: 27, Score: 99}
+	data, _ := json.Marshal(student)
+	writer.Header().Add("content-type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	fmt.Fprint(writer, string(data))
+}
 
 func barHandler(writer http.ResponseWriter, req *http.Request) {
 	values := req.URL.Query()  // 쿼리 인수
@@ -24,6 +39,7 @@ func MakeWebHandler() http.Handler {
 		fmt.Fprint(writer, "Hello World!")
 	})
 	mux.HandleFunc("/bar", barHandler)
+	mux.HandleFunc("/student", studentHandler)
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	return mux

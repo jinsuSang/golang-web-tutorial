@@ -50,5 +50,24 @@ multiplex 약자로 여러 입력 중 하나를 선택해서 반환하는 디지
    assert.Equal("Hello World!", string(data))
    ```
 
-   
+## JSON
 
+1. Student 객체를 `[]byte`로 변환
+
+   ```go
+   data, _ := json.Marshal(student)
+   ```
+
+2. JSON 포맷 표시
+
+   ```go
+   writer.Header().Add("content-type", "application/json")
+   ```
+
+3. 전송
+
+   ```go
+   fmt.Fprint(writer, string(data))
+   ```
+
+   
