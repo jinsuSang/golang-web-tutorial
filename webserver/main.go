@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -13,7 +14,7 @@ type Student struct {
 	Score int    `json:"score"`
 }
 
-func studentHandler(writer http.ResponseWriter, req *http.Request){
+func studentHandler(writer http.ResponseWriter, req *http.Request) {
 	var student = Student{Name: "jinsu", Age: 27, Score: 99}
 	data, _ := json.Marshal(student)
 	writer.Header().Add("content-type", "application/json")
@@ -48,5 +49,13 @@ func MakeWebHandler() http.Handler {
 func main() {
 
 	// 웹 서버 시작
-	http.ListenAndServe(":3000", MakeWebHandler())
+	err := http.ListenAndServeTLS(":3000",
+		"localhost.crt",
+		"localhost.key",
+		MakeWebHandler(),
+	)
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }

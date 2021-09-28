@@ -1,7 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/go
 # Edit at https://www.toptal.com/developers/gitignore?templates=go
 .idea
-
+*.csr
+*.crt
+*.key
 ### Go ###
 # Binaries for programs and plugins
 *.exe
