@@ -16,7 +16,7 @@ func barHandler(writer http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(writer, "Hello %s! id: %d", name, id)
 }
 
-func main() {
+func MakeWebHandler() http.Handler {
 	mux := http.NewServeMux()
 
 	// 웹 핸들러 등록
@@ -25,6 +25,12 @@ func main() {
 	})
 	mux.HandleFunc("/bar", barHandler)
 	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+
+	return mux
+}
+
+func main() {
+
 	// 웹 서버 시작
-	http.ListenAndServe(":3000", mux)
+	http.ListenAndServe(":3000", MakeWebHandler())
 }

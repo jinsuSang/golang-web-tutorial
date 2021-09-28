@@ -19,5 +19,36 @@ multiplex 약자로 여러 입력 중 하나를 선택해서 반환하는 디지
   http.FileServer(http.Dir("static"))
   ```
 
-  
+## Test Http
+
+- testify 패키지 사용
+
+1. response, request 생성 및 경로 테스트
+
+   ```go
+   res := httptest.NewRecorder()
+   req := httptest.NewRequest("GET", "/", nil)
+   ```
+
+2. 핸들러 인스턴스 호출
+
+   ```go
+   mux := MakeWebHandler()
+   mux.ServeHTTP(res, req)
+   ```
+
+3. code 확인 및 데이터 읽기
+
+   ```go
+   assert.Equal(http.StatusOK, res.Code)
+   data, _ := io.ReadAll(res.Body)
+   ```
+
+4. 결과 확인
+
+   ```go
+   assert.Equal("Hello World!", string(data))
+   ```
+
+   
 
