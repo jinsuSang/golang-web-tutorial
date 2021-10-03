@@ -70,4 +70,23 @@ multiplex 약자로 여러 입력 중 하나를 선택해서 반환하는 디지
    fmt.Fprint(writer, string(data))
    ```
 
-   
+## RESTful API 특징
+
+- 자기 표현적인 URL
+
+  URL 만으로 어떤 데이터를 요청하는지 인식
+
+- 메서드로 행위 표현
+
+  메서드와 URL로 데이터 조작을 정의
+
+- 서버 클라이언트 구조
+
+- stateless
+
+  서버가 상태를 보관하지 않음
+
+- cacheable 캐시 처리
+
+  더 쉽게 캐시 정책을 적용하여 성능을 개선
+
