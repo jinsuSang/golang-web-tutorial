@@ -26,6 +26,7 @@ func MakeWebHandler() http.Handler {
 	mux.HandleFunc("/students/{id:[0-9]+}", GetStudentHandler).Methods("GET")
 	mux.HandleFunc("/students", PostStudentHandler).Methods("POST")
 	mux.HandleFunc("/students/{id:[0-9]+}", DeleteStudentHandler).Methods("DELETE")
+	mux.HandleFunc("/students/{id:[0-9]+}", UpdateStudentHandler).Methods("PATCH")
 
 	students = make(map[int]Student)
 	students[1] = Student{1, "jinsu", 27, 87}
@@ -85,6 +86,44 @@ func DeleteStudentHandler(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 	delete(students, id)
+	writer.WriteHeader(http.StatusOK)
+}
+
+func UpdateStudentHandler(writer http.ResponseWriter, request *http.Request) {
+	type UpdateStudent struct {
+		Name         string `json:"name"`
+		UpdatedName  bool   `json:"updatedName"`
+		Score        int    `json:"score"`
+		UpdatedScore bool   `json:"updatedScore"`
+		Age          int    `json:"age"`
+		UpdatedAge   bool   `json:"updatedAge"`
+	}
+
+	var newStudent UpdateStudent
+	err := json.NewDecoder(request.Body).Decode(&newStudent)
+	if err != nil {
+		writer.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	vars := mux.Vars(request)
+	id, _ := strconv.Atoi(vars["id"])
+	if student, ok := students[id]; ok {
+		if newStudent.UpdatedName {
+			student.Name = newStudent.Name
+		}
+		if newStudent.UpdatedAge {
+			student.Age = newStudent.Age
+		}
+		if newStudent.UpdatedScore {
+			student.Score = newStudent.Score
+		}
+		students[id] = student
+	} else {
+		writer.WriteHeader(http.StatusNotFound)
+		return
+	}
+
 	writer.WriteHeader(http.StatusOK)
 }
 

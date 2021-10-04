@@ -99,3 +99,29 @@ func TestJsonHandler_fourth(t *testing.T) {
 	assert.Equal(1, len(list))
 	assert.Equal("sungbin", list[0].Name)
 }
+
+func TestJsonHandler_fifth(t *testing.T) {
+	assert := assert.New(t)
+
+	var student Student
+	mux := MakeWebHandler()
+
+	res := httptest.NewRecorder()
+	req := httptest.NewRequest("PATCH", "/students/1",
+		strings.NewReader(
+			`{"score":100, "updatedScore":true}`,
+		),
+	)
+
+	mux.ServeHTTP(res, req)
+	assert.Equal(http.StatusOK, res.Code)
+
+	res = httptest.NewRecorder()
+	req = httptest.NewRequest("GET", "/students/1", nil)
+
+	mux.ServeHTTP(res, req)
+	assert.Equal(http.StatusOK, res.Code)
+	err := json.NewDecoder(res.Body).Decode(&student)
+	assert.Nil(err)
+	assert.Equal(100, student.Score)
+}
