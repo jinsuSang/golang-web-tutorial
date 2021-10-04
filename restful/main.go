@@ -89,15 +89,16 @@ func DeleteStudentHandler(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusOK)
 }
 
+type UpdateStudent struct {
+	Name         string `json:"name"`
+	UpdatedName  bool   `json:"updatedName"`
+	Score        int    `json:"score"`
+	UpdatedScore bool   `json:"updatedScore"`
+	Age          int    `json:"age"`
+	UpdatedAge   bool   `json:"updatedAge"`
+}
+
 func UpdateStudentHandler(writer http.ResponseWriter, request *http.Request) {
-	type UpdateStudent struct {
-		Name         string `json:"name"`
-		UpdatedName  bool   `json:"updatedName"`
-		Score        int    `json:"score"`
-		UpdatedScore bool   `json:"updatedScore"`
-		Age          int    `json:"age"`
-		UpdatedAge   bool   `json:"updatedAge"`
-	}
 
 	var newStudent UpdateStudent
 	err := json.NewDecoder(request.Body).Decode(&newStudent)
